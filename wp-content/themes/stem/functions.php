@@ -147,7 +147,8 @@ function exercise_register_property_post_type() {
         'show_in_menu'       => true,
         'query_var'          => true,
         'rewrite'            => array( 'slug' => 'vezbe' ),
-        'capability_type'    => 'post',
+        'capability_type'    => 'exercise', // ako zelimo potpunu kontrolu nad vezbama i da ih odvojimo od drugih postova u sistemu, inace je 'post'
+        'map_meta_cap'       => true,       // automatsko mapiranje prava
         'has_archive'        => true,
         'hierarchical'       => false,
         'menu_position'      => 20,
@@ -342,6 +343,84 @@ add_action( 'customize_register', 'exercise_customize_register_header' );
 add_action('wp_enqueue_scripts','load_stylesheets');
 
 add_filter('show_admin_bar', '__return_false');
+
+function create_custom_roles() {
+    // Teacher uloga
+    add_role(
+        'teacher',
+        __( 'Teacher', 'exercise' ),
+        array(
+            'read'                => true,
+            'edit_exercises'      => true,
+            'read_exercises'      => true,
+            'delete_exercises'    => true,
+            'edit_others_exercises' => false,
+        )
+    );
+
+    // Child uloga
+    add_role(
+        'child',
+        __( 'Child', 'exercise' ),
+        array(
+            'read' => true,
+        )
+    );
+}
+add_action( 'init', 'create_custom_roles' );
+
+// dodavanje prava
+function add_exercise_capabilities() {
+    $roles = array( 'administrator', 'teacher' );
+
+    foreach ( $roles as $role_name ) {
+        $role = get_role( $role_name );
+        if ( $role ) {
+            $role->add_cap( 'edit_exercises' );
+            $role->add_cap( 'read_exercises' );
+            $role->add_cap( 'delete_exercises' );
+            $role->add_cap( 'edit_others_exercises' );
+            $role->add_cap( 'delete_others_exercises' );
+        }
+    }
+}
+add_action( 'init', 'add_exercise_capabilities' );
+
+// pristupi
+function restrict_dashboard_menu() {
+    if ( current_user_can( 'teacher' ) ) {
+        remove_menu_page( 'plugins.php' );
+        remove_menu_page( 'tools.php' );
+        remove_menu_page( 'options-general.php' );
+        remove_menu_page( 'themes.php' );
+        remove_menu_page( 'users.php' );
+    }
+
+    if ( current_user_can( 'child' ) ) {
+        wp_redirect( home_url() );
+        exit;
+    }
+}
+add_action( 'admin_menu', 'restrict_dashboard_menu', 999 );
+
+function redirect_users_on_login($redirect_to, $request, $user) {
+    if ( isset( $user->roles ) && is_array( $user->roles ) ) {
+        if ( in_array( 'teacher', $user->roles ) ) {
+            return admin_url( 'edit.php?post_type=exercise' );
+        } elseif ( in_array( 'child', $user->roles ) ) {
+            return home_url();
+        }
+    }
+    return $redirect_to;
+}
+add_filter( 'login_redirect', 'redirect_users_on_login', 10, 3 );
+
+function hide_admin_bar_for_child() {
+    if ( current_user_can( 'child' ) ) {
+        show_admin_bar( false );
+    }
+}
+add_action( 'after_setup_theme', 'hide_admin_bar_for_child' );
 
 
 ?>
