@@ -10,11 +10,11 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="slide_text">
-                                        <h3><span span class="theme_color"><?php echo $homefields['main_heading']  ?></span><br>you can learn anything</h3>
-                                        <h4><?php echo $homefields['small_heading']  ?></h4>
+                                        <h3><span span class="theme_color">STEMATIC</span><br>you can learn anything</h3>
+                                        <h4>Platforma za učenje</h4>
                                         <br>
                                         <div class="full center">
-										    <a class="contact_bt" href="<?php echo $homefields['link'] ?>"><?php echo $homefields['link_text']  ?></a>
+										    <a class="contact_bt" href="#">Get Started!</a>
 										</div>
                                     </div>
                                 </div>
