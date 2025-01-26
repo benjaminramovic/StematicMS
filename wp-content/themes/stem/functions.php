@@ -40,4 +40,13 @@ add_action('wp_enqueue_scripts','load_stylesheets');
 add_filter('show_admin_bar', '__return_false');
 
 
+
+add_theme_support('menus');
+
+register_nav_menus(
+    array(
+        'top-menu'=>__('Top menu','stem')
+    )
+);
+
 ?>

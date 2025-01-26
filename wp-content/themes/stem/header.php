@@ -50,14 +50,26 @@
                     <span></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbar-wd">
-                    <ul class="navbar-nav">
+
+                    <?php 
+                        wp_nav_menu(
+                            array(
+                                'theme_location' => 'top_menu',
+                                'container' => 'ul',
+                                'menu_class' => 'navbar-nav'
+                            )
+                        )
+                    
+                    
+                    ?>
+                    <!-- <ul class="navbar-nav">
                         <li><a class="nav-link active" href="index.html">Home</a></li>
                         <li><a class="nav-link" href="about.html">About</a></li>
                         <li><a class="nav-link" href="courses.html">Courses</a></li>
                         <li><a class="nav-link" href="reaserch.html">Reaserch</a></li>
 						<li><a class="nav-link" href="news.html">News</a></li>
 						<li><a class="nav-link" href="contact.html">Contact us</a></li>
-                    </ul>
+                    </ul> -->
                 </div>
                 <div class="search-box">
                     <input type="text" class="search-txt" placeholder="Search">

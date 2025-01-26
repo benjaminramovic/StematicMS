@@ -1,5 +1,6 @@
     <?php get_header(); ?>
     <!-- Start Banner -->
+    <?php $homefields = get_field('home_section'); ?>
     <div class="ulockd-home-slider">
         <div class="container-fluid">
             <div class="row">
@@ -9,11 +10,11 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="slide_text">
-                                        <h3><span span class="theme_color">You only have know one thing</span><br>you can learn anything</h3>
-                                        <h4>Free Educations</h4>
+                                        <h3><span span class="theme_color"><?php echo $homefields['main_heading']  ?></span><br>you can learn anything</h3>
+                                        <h4><?php echo $homefields['small_heading']  ?></h4>
                                         <br>
                                         <div class="full center">
-										    <a class="contact_bt" href="courses.html">Start a Course</a>
+										    <a class="contact_bt" href="<?php echo $homefields['link'] ?>"><?php echo $homefields['link_text']  ?></a>
 										</div>
                                     </div>
                                 </div>
